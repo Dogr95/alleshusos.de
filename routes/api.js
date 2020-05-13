@@ -1,0 +1,54 @@
+var express = require('express');
+var router = express.Router();
+const TwitchLogin = require(`../test/main.js`);
+
+/* GET home page. */
+router.get('/', function(req, res, next) {
+  res.send('this is the api');
+});
+
+// Answers requests sent to /api/
+router.get('/:command&:object', function (req, res) {
+    console.log(req.params)
+    if('user'==req.params.command) {
+        // Answers request with the user object
+        TwitchLogin.refresh()
+        .then(TC => TC.helix.users.getUserByName(req.params.object), error => console.log(error))
+        .then(User => res.send(JSON.stringify(User, null, 4)))
+    } else if ('channel'==req.params.command) {
+        // Answers request with the channel object of given user
+        TwitchLogin.refresh()
+        .then(TC => {
+            TC.helix.users.getUserByName(req.params.object)
+                .then(User => TC.kraken.channels.getChannel(User.id))
+                .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
+        }, error => console.log(error))
+    } else if ('stream'==req.params.command) {
+        // Answers request with the stream object of given user
+        TwitchLogin.refresh()
+        .then(TC => {
+            TC.helix.users.getUserByName(req.params.object)
+                .then(User => TC.helix.streams.getStreamByUserId(User.id))
+                .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
+        }, error => console.log(error))
+    } else if ('unknown'==req.params.command) {
+        // W.I.P
+        TwitchLogin.refresh()
+        .then(TC => {
+            TC.helix.streams.getStreamsPaginated(req.params.object)
+                .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
+        }, error => console.log(error))
+    } else if ('followers'==req.params.command) {
+        // Answers request with the last 25 followers of given user
+        TwitchLogin.refresh()
+            .then(TC => {
+                TC.helix.users.getUserByName(req.params.object)
+                    .then(User => TC.kraken.channels.getChannelFollowers(User.id))
+                    .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
+            }, error => console.log(error))
+    } else {
+
+    }
+});
+
+module.exports = router;
