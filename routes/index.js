@@ -12,6 +12,14 @@ module.exports = function(app) {
       res.send('Was für GET request')
     }
   })
+  // no-category redirection
+  app.get('/no-category', function (req, res) {
+    if (req.accepts('html')) {
+      res.sendFile(path.join(__dirname, '../public',`/no-category.html`))
+    } else {
+      res.send('Was für GET request')
+    }
+  })
 
 // Answers POST requests sent to /
   app.post('/', function (req, res) {

@@ -31,12 +31,19 @@ router.get('/:command&:object', function (req, res) {
                 .then(User => TC.helix.streams.getStreamByUserId(User.id))
                 .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
         }, error => console.log(error))
-    } else if ('unknown'==req.params.command) {
-        // W.I.P
+    } else if ('game'==req.params.command) {
+        // Retrieves all Streams in given category
         TwitchLogin.refresh()
-        .then(TC => {
-            TC.helix.streams.getStreamsPaginated(req.params.object)
-                .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
+        .then(async TC => {
+            const Streams = await TC.helix.streams.getStreamsPaginated({game: `${req.params.object}`})
+                        let Answer = new Map();
+                        let Number = 0;
+                        for await (const Stream of Streams) {
+                            Number++
+                            Answer.set(Number, Stream)
+                    }
+            const obj = Object.fromEntries(Answer)
+            res.send(JSON.stringify(obj, null, 4))
         }, error => console.log(error))
     } else if ('followers'==req.params.command) {
         // Answers request with the last 25 followers of given user

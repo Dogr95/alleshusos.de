@@ -11,6 +11,7 @@ app.use(subdomain('api', api));
 // Puts all files in /public/ to / and makes them accessible
 app.use(express.static(path.join(__dirname, 'public')))
 
+// loads main routing
 require(`${__dirname}/routes/index.js`)(app);
 
 // starts server
