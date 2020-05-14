@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const TwitchLogin = require(`../test/main.js`);
+const TwitchLogin = require(`../twitch/main.js`);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

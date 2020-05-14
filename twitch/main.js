@@ -5,7 +5,7 @@ const CLIENT_ID = process.env.clientId;
 const CLIENT_SECRET = process.env.clientSecret;
 
 const refresh = () => (async () => {
-    const tokenData = JSON.parse(await F.readFileSync('test/tokens.json', function (err) {
+    const tokenData = JSON.parse(await F.readFileSync('twitch/tokens.json', function (err) {
         if (err != null) {
             console.log(err)
         }
@@ -20,7 +20,7 @@ const refresh = () => (async () => {
                 refreshToken,
                 expiryDate: expiryDate === null ? null : expiryDate.getTime()
             };
-            await F.writeFileSync('test/tokens.json', JSON.stringify(newTokenData, null, 4), function (err) {
+            await F.writeFileSync('twitch/tokens.json', JSON.stringify(newTokenData, null, 4), function (err) {
                 if (err != null) {
                     console.log(err)
                 }
