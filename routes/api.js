@@ -4,7 +4,7 @@ const TwitchLogin = require(`../test/main.js`);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.send('this is the api');
+  res.redirect('http://alleshusos.de:6969/');
 });
 
 // Answers requests sent to /api/
