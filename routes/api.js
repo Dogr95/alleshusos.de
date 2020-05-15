@@ -1,6 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const TwitchLogin = require(`../twitch/main.js`);
+const cors = require('cors');
+
+router.use(cors({
+    origin: '*',
+    optionsSuccessStatus: 200
+}));
 
 /* GET home page. */
 router.get('/', function(req, res, next) {

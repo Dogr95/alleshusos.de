@@ -1,8 +1,14 @@
 var express = require('express');
 var router = express.Router();
 const path = require('path');
+const cors = require('cors');
 
 module.exports = function(app) {
+    app.use(cors({
+            origin: '*',
+            optionsSuccessStatus: 200
+        }));
+
   /* GET home page. */
 // Answers GET requests sent to /
   app.get('/', function (req, res) {
