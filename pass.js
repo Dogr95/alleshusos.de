@@ -38,7 +38,6 @@ module.exports = function(app, getUserByName, getUserById) {
     passport.deserializeUser((id, done) => {
         done(null, getUserById(id))
     })
-    app.use('/private', [passport.authenticate('local'), express.static('private')])
     app.post('/register', async (req, res) => {
         try {
           const hashedPassword = await bcrypt.hash(req.body.password, 10)
@@ -66,4 +65,13 @@ module.exports = function(app, getUserByName, getUserById) {
             req.logout();
             res.redirect('/');
         })
+    function authenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next()
+    }
+
+    res.redirect('/login')
+  }
+
+    app.use('/private', [authenticated, express.static(__dirname + "/private")])
 }

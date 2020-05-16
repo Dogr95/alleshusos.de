@@ -19,7 +19,7 @@ module.exports = function(app) {
         }));
 
   /* GET home page. */
-// Answers GET requests sent to /
+  // Answers GET requests sent to /
   app.get('/', function (req, res) {
     if (req.accepts('html')) {
       res.sendFile(path.join(__dirname, '../public',`/index.html`))
@@ -53,8 +53,8 @@ module.exports = function(app) {
   app.get('/coolshit', authenticated, (req, res) => {
     res.sendFile(path.join(__dirname, '../private',`/coolshit.html`))
   })
-    app.use('/private', authenticated,
-    express.static(path.join(__dirname, 'private')))
+    // app.use('/private', express.static(__dirname + "/private"))
+    // app.use('/private', [authenticated, express.static(__dirname + "/private" )])
     app.use('/archive', authenticated, (req, res) => {
       res.sendFile(path.join(__dirname, '../private', '/archive.html'))
     })
