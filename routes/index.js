@@ -2,8 +2,17 @@ var express = require('express');
 var router = express.Router();
 const path = require('path');
 const cors = require('cors');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
+const F = require('fs');
+const users = JSON.parse(F.readFileSync('private/users.json', function (err) { console.log(err) }))
 
 module.exports = function(app) {
+  require('../pass.js')(app,
+          name => users.find(user => user.name === name),
+            id => users.find(user => user.id === id)
+    );
     app.use(cors({
             origin: '*',
             optionsSuccessStatus: 200
@@ -26,24 +35,42 @@ module.exports = function(app) {
       res.send('Was für GET request')
     }
   })
-  // login for archive page
-  app.get('/archive', function(req, res, next) {
-      const auth = {login: 'test', password: 'test'} // CHANGE PLS
+  function authenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      return next()
+    }
 
-      const b64auth = (req.headers.authorization || '').split(' ')[1] || ''
-      const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':')
+    res.redirect('/login')
+  }
 
-      if (login && password && login === auth.login && password === auth.password) {
-          res.sendFile(path.join(__dirname, '../private',`/archive.html`))
-      } else {
-          res.set('WWW-Authenticate', 'Basic realm="MELD DICH AN DU HUSO!"') // change this
-          res.status(401).send('Huso meld dich an.') // custom message
-      }
+  function already_authenticated(req, res, next) {
+    if (req.isAuthenticated()) {
+      res.redirect('/')
+    }
+
+    next()
+  }
+  app.get('/coolshit', authenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '../private',`/coolshit.html`))
   })
+    app.use('/private', authenticated,
+    express.static(path.join(__dirname, 'private')))
+    app.use('/archive', authenticated, (req, res) => {
+      res.sendFile(path.join(__dirname, '../private', '/archive.html'))
+    })
 
 // Answers POST requests sent to /
   app.post('/', function (req, res) {
     res.send('Was für POST request')
+  })
+  app.get('/login', already_authenticated, function (req, res) {
+    res.sendFile(path.join(__dirname, '../public',`/login.html`))
+  })
+  app.get('/login/request', already_authenticated, function(req, res) {
+    res.sendFile(path.join(__dirname, '../public', '/request.html'))
+  })
+    app.get('/register', already_authenticated, function (req, res) {
+    res.sendFile(path.join(__dirname, '../public',`/register.html`))
   })
 
 // Answers PUT requests sent to /
@@ -54,6 +81,11 @@ module.exports = function(app) {
 // Answers DELETE requests sent to /
   app.delete('/', function (req, res) {
     res.send('Was für DELETE request')
+  })
+
+  app.delete('/logout', (req, res) => {
+    req.logOut()
+    req.redirect('/login')
   })
 
 

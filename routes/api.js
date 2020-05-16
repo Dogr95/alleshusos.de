@@ -60,7 +60,7 @@ router.get('/:command&:object', function (req, res) {
                     .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
             }, error => console.log(error))
     } else {
-
+        res.send('Invalid Input')
     }
 });
 
