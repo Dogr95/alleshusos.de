@@ -29,6 +29,14 @@ router.get('/:command&:object', function (req, res) {
                 .then(User => TC.kraken.channels.getChannel(User.id))
                 .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
         }, error => console.log(error))
+    } else if ('channel_by_id'==req.params.command) {
+        // Answers request with the channel object of given userid
+        TwitchLogin.refresh()
+        .then(TC => {
+            console.log(typeof req.params.object)
+            TC.kraken.channels.getChannel(req.params.object)
+                .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
+        }, error => console.log(error))
     } else if ('stream'==req.params.command) {
         // Answers request with the stream object of given user
         TwitchLogin.refresh()
