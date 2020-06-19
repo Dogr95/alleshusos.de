@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+// var express = require('express');
+// var router = express.Router();
 const path = require('path');
 const cors = require('cors');
 const session = require('express-session');
@@ -91,6 +91,28 @@ module.exports = function(app) {
     req.logOut()
     req.redirect('/login')
   })
+
+  // Websocket Alerts W.I.P
+  app.get('/alerts', function(req, res) {
+      let counter = 0;
+      res.flushHeaders();
+    let interValID = setInterval(() => {
+        counter++;
+        if (counter >= 11) {
+            clearInterval(interValID);
+            res.end(); // terminates SSE session
+            return;
+        }
+        res.write(`test${counter}\n`)
+        res.write(`data: ${JSON.stringify({num: counter})}\n\n`); // res.write() instead of res.send()
+    }, 1000);
+
+    // If client closes connection, stop sending events
+    res.on('close', () => {
+        console.log('client dropped me');
+        clearInterval(interValID);
+        res.end();
+  })})
 
 
 // Puts all files in /public/ to / and makes them accessible

@@ -10,7 +10,7 @@ router.use(cors({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.redirect('http://alleshusos.de:6969/');
+  res.redirect('http://alleshusos.de/');
 });
 
 // Answers requests sent to /api/
