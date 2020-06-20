@@ -27,6 +27,11 @@ module.exports = function(app) {
       res.send('Was für GET request')
     }
   })
+
+  app.use('/commands', function(req, res) {
+    res.sendFile(path.join(__dirname, '../public', '/commands.html'))
+  })
+
   // no-category redirection
   app.get('/no-category', function (req, res) {
     if (req.accepts('html')) {
