@@ -63,6 +63,10 @@ module.exports = function(app) {
     res.sendFile(path.join(__dirname, '../private',`/twitch.html`))
   })
 
+  app.use('/requests', authenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '../private', '/requests.html'))
+  })
+
 // Answers POST requests sent to /
   app.post('/', function (req, res) {
     res.send('Was für POST request')
