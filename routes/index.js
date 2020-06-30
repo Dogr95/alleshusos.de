@@ -32,6 +32,10 @@ module.exports = function(app) {
     res.sendFile(path.join(__dirname, '../public', '/commands.html'))
   })
 
+  app.use('/leaderboard', function(req, res) {
+    res.sendFile(path.join(__dirname, '../public', '/leaderboard.html'))
+  })
+
   // no-category redirection
   app.get('/no-category', function (req, res) {
     if (req.accepts('html')) {
