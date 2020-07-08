@@ -72,6 +72,13 @@ module.exports = function(app) {
     res.sendFile(path.join(__dirname, '../private',`/twitch.html`))
   })
 
+  app.use('/outdated', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', '/outdated.html'))
+  })
+  app.use('/download', authenticated, (req, res) => {
+    res.sendFile(path.join(__dirname, '../private', '/alleshusosDE_Client.zip'))
+  })
+
   app.use('/requests', authenticated, (req, res) => {
     res.sendFile(path.join(__dirname, '../private', '/requests.html'))
   })
