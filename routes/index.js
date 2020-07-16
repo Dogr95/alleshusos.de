@@ -6,7 +6,7 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const passport = require('passport'), LocalStrategy = require('passport-local').Strategy;
 const F = require('fs');
-const users = JSON.parse(F.readFileSync('private/users.json', function (err) { console.log(err) }))
+const users = JSON.parse(F.readFileSync('users.json', function (err) { console.log(err) }))
 
 module.exports = function(app) {
   require('../pass.js')(app,
