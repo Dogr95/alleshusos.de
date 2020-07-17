@@ -151,7 +151,7 @@ router.post('/register', async function (req, res) {
       user.password = await bcrypt.hash(req.body.password, 10)
       game_users.push(user)
       F.writeFileSync('game_users.json', JSON.stringify(game_users, null, 4))
-      res.send(response(true, game_users))
+      res.send(response(true, user))
   } catch (e) {
     console.log(e)
       res.send(e)
