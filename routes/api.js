@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 const TwitchLogin = require(`../twitch/main.js`);
 const cors = require('cors');
 const F = require('fs');
-const game_users = JSON.parse(F.readFileSync('game_users.json', function (err) { console.log(err) }));
+let game_users = {};
 const bcrypt = require('bcrypt');
 
 router.use(cors({
@@ -114,6 +114,7 @@ router.post('/login', async function (req, res) {
 })
 
 function getUserByName(name) {
+  game_users = load_users()
   for (user in game_users) {
     if (game_users[user].name === name) {
       return game_users[user]
@@ -135,7 +136,12 @@ function response(status, user=null) {
   }
 }
 
+function load_users() {
+  return JSON.parse(F.readFileSync('game_users.json', function (err) { console.log(err) }));
+}
+
 router.post('/register', async function (req, res) {
+  game_users = load_users()
   const request = req.body
   const user = {
     "id": `${new Date().getTime()}`,
