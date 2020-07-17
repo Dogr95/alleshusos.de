@@ -1,7 +1,11 @@
 var express = require('express');
 var router = express.Router();
+var bodyParser = require('body-parser');
 const TwitchLogin = require(`../twitch/main.js`);
 const cors = require('cors');
+const F = require('fs');
+const game_users = JSON.parse(F.readFileSync('game_users.json', function (err) { console.log(err) }));
+const bcrypt = require('bcrypt');
 
 router.use(cors({
     origin: '*',
