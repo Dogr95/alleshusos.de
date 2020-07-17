@@ -131,7 +131,7 @@ function response(status, user=null) {
     }
   } else {
     return {
-      "sucess": false
+      "success": false
     }
   }
 }
