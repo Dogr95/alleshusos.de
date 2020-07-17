@@ -67,9 +67,90 @@ router.get('/:command&:object', function (req, res) {
                     .then(User => TC.kraken.channels.getChannelFollowers(User.id))
                     .then(Answer => res.send(JSON.stringify(Answer, null, 4)))
             }, error => console.log(error))
+    } else if (req.params.command=='login') {
+      console.log(req.params.object)
     } else {
         res.send('Invalid Input')
     }
 });
+
+router.post('/login', async function (req, res) {
+  const request = req.body
+  const user = getUserByName(request.name)
+  if (!user) {
+      res.send(response(false))
+      return
+  }
+
+  if (!request.password) {
+    res.send(response(false))
+    return
+  }
+
+  if (!request.name) {
+    res.send(response(false))
+    return
+  }
+
+  try {
+      if (await bcrypt.compare(request.password, user.password)) {
+          res.send(response(true, user))
+          return
+      } else {
+          res.send(response(false))
+          return
+      }
+  } catch (e) {
+    console.log(e)
+      res.send(e)
+      return
+  }
+})
+
+function getUserByName(name) {
+  for (user in game_users) {
+    if (game_users[user].name === name) {
+      return game_users[user]
+    }
+  }
+  return false
+}
+
+function response(status, user=null) {
+  if(status && user) {
+    return {
+      "success": true,
+      "user": user
+    }
+  } else {
+    return {
+      "sucess": false
+    }
+  }
+}
+
+router.post('/register', async function (req, res) {
+  const request = req.body
+  const user = {
+    "id": `${new Date().getTime()}`,
+    "name": request.name,
+    "password": request.password
+  }
+  if (getUserByName(user.name)) {
+      res.send(response(false))
+      return
+  }
+
+  try {
+      user.password = await bcrypt.hash(req.body.password, 10)
+      game_users.push(user)
+      F.writeFileSync('game_users.json', JSON.stringify(game_users, null, 4))
+      res.send(response(true, game_users))
+  } catch (e) {
+    console.log(e)
+      res.send(e)
+      return
+  }
+})
 
 module.exports = router;
