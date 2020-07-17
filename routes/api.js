@@ -12,6 +12,8 @@ router.use(cors({
     optionsSuccessStatus: 200
 }));
 
+router.use(bodyParser.json());
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.redirect('http://alleshusos.de/');
