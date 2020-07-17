@@ -74,7 +74,7 @@ router.get('/:command&:object', function (req, res) {
     }
 });
 
-router.post('/login', async function (req, res) {
+router.post('/gamelogin', async function (req, res) {
   const request = req.body
   const user = getUserByName(request.name)
   if (!user) {
@@ -129,7 +129,7 @@ function response(status, user=null) {
   }
 }
 
-router.post('/register', async function (req, res) {
+router.post('/gameregister', async function (req, res) {
   const request = req.body
   const user = {
     "id": `${new Date().getTime()}`,
