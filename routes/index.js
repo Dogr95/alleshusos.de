@@ -87,6 +87,10 @@ module.exports = function(app) {
     res.sendFile(path.join(__dirname, '../private', '/clips', '/alleshusosTrailer.mp4'))
   })
 
+  app.use('/timeout', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'timeout.html'))
+  })
+
 // Answers POST requests sent to /
   app.post('/', function (req, res) {
     res.send('Was für POST request')
