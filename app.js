@@ -41,6 +41,7 @@ let httpsServer = https.createServer({
     ca: ca
 }, app)
 const simulation = new (require('../HTMLCanvasGame/Classes/alleshusos.js'))(httpsServer)
+simulation.create()
 
 // starts server
 httpServer.listen(80, () => {
