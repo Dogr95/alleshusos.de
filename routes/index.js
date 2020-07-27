@@ -90,6 +90,9 @@ module.exports = function(app) {
   app.use('/timeout', (req, res) => {
     res.sendFile(path.join(__dirname, '../public', 'timeout.html'))
   })
+  app.use('/simulation', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public', 'simulation.html'))
+  })
 
 // Answers POST requests sent to /
   app.post('/', function (req, res) {
