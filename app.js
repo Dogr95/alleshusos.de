@@ -40,7 +40,7 @@ let httpsServer = https.createServer({
     cert: certificate,
     ca: ca
 }, app)
-
+const simulation = require('../RenderTesting/Classes/alleshusos.js')(httpsServer)
 
 // starts server
 httpServer.listen(80, () => {
